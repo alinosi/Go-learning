@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualisasi Pointer Go</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .scenario {
+            margin-bottom: 60px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .scenario h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 1.8em;
+        }
+        
+        .memory-diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .memory-block {
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 20px;
+            min-width: 200px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .memory-block.stack {
+            background: #e8f4fd;
+            border-color: #2980b9;
+        }
+        
+        .memory-block.heap {
+            background: #fff3cd;
+            border-color: #f39c12;
+        }
+        
+        .memory-block.package {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .memory-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        
+        .variable {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .variable.pointer {
+            background: #ffe6e6;
+            border-color: #e74c3c;
+        }
+        
+        .variable.struct {
+            background: #e6f3ff;
+            border-color: #3498db;
+        }
+        
+        .arrow {
+            font-size: 2em;
+            color: #e74c3c;
+            align-self: center;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        .address {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .value {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .comment {
+            color: #95a5a6;
+            font-style: italic;
+        }
+        
+        .step {
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .step h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 Visualisasi Pointer Go dengan Package</h1>
+        </div>
+        
+        <div class="content">
+            <div class="scenario">
+                <h2>Skenario 1: Instance Biasa (Non-Pointer)</h2>
+                
+                <div class="code-block">
+// Di package main<br>
+import "vehicle"<br><br>
+func main() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;avanza := vehicle.Car{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name: "avanza",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Color: "white"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;avanza.CarSpeed(80)<br>
+}
+                </div>
+                
+                <div class="memory-diagram">
+                    <div class="memory-block stack">
+                        <div class="memory-title">📚 Stack (main function)</div>
+                        <div class="variable struct">
+                            <strong>avanza</strong><br>
+                            Address: <span class="address">0x1000</span><br>
+                            Type: vehicle.Car<br>
+                            Value: {Name: "avanza", Color: "white"}
+                        </div>
+                    </div>
+                    
+                    <div class="memory-block package">
+                        <div class="memory-title">📦 Package vehicle</div>
+                        <div class="variable">
+                            <strong>Method: CarSpeed()</strong><br>
+                            Receiver: Car (by value)<br>
+                            <span class="comment">// Menerima copy dari avanza</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <h3>Yang Terjadi:</h3>
+                    <p>• <span class="highlight">avanza</span> adalah instance asli yang disimpan di stack</p>
+                    <p>• Saat memanggil <span class="highlight">avanza.CarSpeed(80)</span>, Go mengirim <strong>copy</strong> dari avanza ke method</p>
+                    <p>• Method tidak bisa mengubah nilai asli avanza</p>
+                </div>
+            </div>
+
+            <div class="scenario">
+                <h2>Skenario 2: Pointer ke Instance</h2>
+                
+                <div class="code-block">
+// Di package main<br>
+import "vehicle"<br><br>
+func main() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;avanza := &vehicle.Car{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name: "avanza",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Color: "white"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;avanza.CarSpeed(80)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;avanza.ChangeColor("red")<br>
+}
+                </div>
+                
+                <div class="memory-diagram">
+                    <div class="memory-block stack">
+                        <div class="memory-title">📚 Stack (main function)</div>
+                        <div class="variable pointer">
+                            <strong>avanza</strong><br>
+                            Address: <span class="address">0x2000</span><br>
+                            Type: *vehicle.Car<br>
+                            Value: <span class="address">0x3000</span><br>
+                            <span class="comment">// Pointer ke heap</span>
+                        </div>
+                    </div>
+                    
+                    <div class="arrow">→</div>
+                    
+                    <div class="memory-block heap">
+                        <div class="memory-title">🏠 Heap</div>
+                        <div class="variable struct">
+                            <strong>Car Instance</strong><br>
+                            Address: <span class="address">0x3000</span><br>
+                            Type: vehicle.Car<br>
+                            Name: <span class="value">"avanza"</span><br>
+                            Color: <span class="value">"white"</span>
+                        </div>
+                    </div>
+                    
+                    <div class="memory-block package">
+                        <div class="memory-title">📦 Package vehicle</div>
+                        <div class="variable">
+                            <strong>Method: CarSpeed()</strong><br>
+                            Receiver: *Car (by pointer)<br>
+                            <span class="comment">// Menerima alamat 0x3000</span>
+                        </div>
+                        <div class="variable">
+                            <strong>Method: ChangeColor()</strong><br>
+                            Receiver: *Car (by pointer)<br>
+                            <span class="comment">// Bisa mengubah nilai asli</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <h3>Yang Terjadi:</h3>
+                    <p>• <span class="highlight">avanza</span> adalah pointer yang disimpan di stack</p>
+                    <p>• Pointer ini menunjuk ke alamat <span class="address">0x3000</span> di heap</p>
+                    <p>• Instance Car yang sesungguhnya ada di heap</p>
+                    <p>• Method menerima alamat, jadi bisa mengubah nilai asli</p>
+                </div>
+            </div>
+
+            <div class="scenario">
+                <h2>Skenario 3: Passing Pointer ke Function Lain</h2>
+                
+                <div class="code-block">
+// Di package main<br>
+import "vehicle"<br><br>
+func processCar(c *vehicle.Car) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;c.Name = "Modified " + c.Name<br>
+&nbsp;&nbsp;&nbsp;&nbsp;c.CarSpeed(100)<br>
+}<br><br>
+func main() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;avanza := &vehicle.Car{Name: "avanza"}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;processCar(avanza)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;fmt.Println(avanza.Name) <span class="comment">// Output: "Modified avanza"</span><br>
+}
+                </div>
+                
+                <div class="memory-diagram">
+                    <div class="memory-block stack">
+                        <div class="memory-title">📚 Stack (main)</div>
+                        <div class="variable pointer">
+                            <strong>avanza</strong><br>
+                            Type: *vehicle.Car<br>
+                            Value: <span class="address">0x4000</span>
+                        </div>
+                    </div>
+                    
+                    <div class="arrow">→</div>
+                    
+                    <div class="memory-block heap">
+                        <div class="memory-title">🏠 Heap</div>
+                        <div class="variable struct">
+                            <strong>Car Instance</strong><br>
+                            Address: <span class="address">0x4000</span><br>
+                            Name: <span class="value">"avanza"</span><br>
+                            <span class="comment">↓ Dimodifikasi oleh processCar</span><br>
+                            Name: <span class="value">"Modified avanza"</span>
+                        </div>
+                    </div>
+                    
+                    <div class="memory-block stack">
+                        <div class="memory-title">📚 Stack (processCar)</div>
+                        <div class="variable pointer">
+                            <strong>c</strong><br>
+                            Type: *vehicle.Car<br>
+                            Value: <span class="address">0x4000</span><br>
+                            <span class="comment">// Copy dari avanza pointer</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <h3>Yang Terjadi:</h3>
+                    <p>• <span class="highlight">avanza</span> pointer dikopy ke parameter <span class="highlight">c</span></p>
+                    <p>• Kedua pointer menunjuk ke alamat yang sama: <span class="address">0x4000</span></p>
+                    <p>• Perubahan melalui <span class="highlight">c</span> akan terlihat di <span class="highlight">avanza</span></p>
+                    <p>• Ini karena keduanya merujuk ke instance yang sama di heap</p>
+                </div>
+            </div>
+
+            <div class="scenario">
+                <h2>📝 Ringkasan Penting</h2>
+                
+                <div class="step">
+                    <h3>🎯 Key Points:</h3>
+                    <p><strong>Non-Pointer:</strong> Instance disimpan langsung di stack, method menerima copy</p>
+                    <p><strong>Pointer:</strong> Alamat disimpan di stack, instance di heap, method menerima alamat</p>
+                    <p><strong>Package:</strong> Tidak mempengaruhi cara kerja pointer, hanya namespace</p>
+                    <p><strong>Method Call:</strong> Go otomatis handle pointer, tidak perlu dereference manual</p>
+                </div>
+                
+                <div class="step">
+                    <h3>🔄 Analogi Sederhana:</h3>
+                    <p><strong>Non-Pointer</strong> = Fotokopi dokumen (perubahan tidak mempengaruhi asli)</p>
+                    <p><strong>Pointer</strong> = Alamat rumah (semua orang yang tahu alamat bisa mengunjungi rumah yang sama)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
