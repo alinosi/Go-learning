@@ -1,3 +1,3 @@
-module belajar-golang-standard-library
+module standard-library
 
 go 1.23.4

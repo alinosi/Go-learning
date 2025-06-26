@@ -1,3 +1,3 @@
-module belajar-golang-dasar
+module dasar
 
 go 1.21.3
