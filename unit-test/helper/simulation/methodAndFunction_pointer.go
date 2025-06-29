@@ -32,7 +32,10 @@ func (t *T) Failure(message string) {
 func main() {
 
 	// create an instance of struct T
-	t := &T{name: "oby", number: 1}
+	t := &T{
+		name:   "bitzer",
+		number: 1,
+	}
 
 	// run the unit test
 	UnitTest(t)
