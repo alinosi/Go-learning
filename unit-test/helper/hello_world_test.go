@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestTableHelloWorld(t *testing.T) {
+func TestTableHelloWorld(t *testing.T) { // suitable for testing responses on different variable types
 	tests := []struct {
 		name     string
 		request  string
