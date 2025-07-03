@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 )
 
 // Category-entity
@@ -18,7 +17,7 @@ type CategoryRepository interface {
 
 // CategoryService
 type CategoryService struct {
-	Repository CategoryRepository
+	Repository CategoryRepository // bisa berisi apapun yang penting impelemen CategoryRepository
 }
 
 func (service CategoryService) Get(id string) (*Category, error) {
@@ -31,5 +30,7 @@ func (service CategoryService) Get(id string) (*Category, error) {
 }
 
 func main() {
-	fmt.Println("hello wolrd")
+	test := CategoryService{}
+
+	test.Get("1")
 }
