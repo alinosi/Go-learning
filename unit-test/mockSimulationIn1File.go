@@ -1,5 +1,7 @@
 package main
 
+// this is a simulation for mock impelemenation but in one file
+
 import (
 	"errors"
 )
@@ -34,3 +36,5 @@ func main() {
 
 	test.Get("1")
 }
+
+// this is contain code from service, entity, and repository directory
