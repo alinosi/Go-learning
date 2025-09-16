@@ -1,4 +1,4 @@
-package main
+package belajar_golang_goroutines
 
 import (
 	"fmt"
@@ -115,6 +115,34 @@ func TestSelectChannel(t *testing.T) {
 		case data := <-channel2:
 			fmt.Println("Data dari Channel 2 Sultan II", data)
 			counter++
+		}
+
+		if counter == 2 {
+			break
+		}
+	}
+}
+
+func TestDefaultSelectChannel(t *testing.T) {
+	channel1 := make(chan string)
+	channel2 := make(chan string)
+	defer close(channel1)
+	defer close(channel2)
+
+	go GiveMeResponse(channel1)
+	go GiveMeResponse(channel2)
+
+	counter := 0
+	for {
+		select {
+		case data := <-channel1:
+			fmt.Println("Data dari Channel 1 Sultan I", data)
+			counter++
+		case data := <-channel2:
+			fmt.Println("Data dari Channel 2 Sultan II", data)
+			counter++
+		default:
+			fmt.Println("Menunggu data...")
 		}
 
 		if counter == 2 {

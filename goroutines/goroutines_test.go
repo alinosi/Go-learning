@@ -1,4 +1,4 @@
-package main
+package belajar_golang_goroutines
 
 import (
 	"fmt"
