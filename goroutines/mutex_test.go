@@ -83,6 +83,8 @@ func Transfer(user1 *UserBalance, user2 *UserBalance, amount int) {
 	user1.Change(-amount)
 
 	time.Sleep(1 * time.Second)
+	// proses berhenti di sini karena user1 dan user2 saling mengunggu untuk mengunci data
+	// seharusnya ketika proses write sudah selesai di user1 maka seharusnya segera diunlock
 
 	user2.Lock()
 	fmt.Println("Lock user2", user2.Name)
@@ -90,7 +92,7 @@ func Transfer(user1 *UserBalance, user2 *UserBalance, amount int) {
 
 	time.Sleep(1 * time.Second)
 
-	user1.Unlock()
+	user1.Unlock() // seharusnya ini tidak berada di sini
 	user2.Unlock()
 }
 
