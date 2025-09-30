@@ -10,14 +10,15 @@ import (
 func RunAsynchronous(group *sync.WaitGroup) {
 	defer group.Done()
 
-	
 	fmt.Println("Hello")
 	time.Sleep(1 * time.Second)
 }
 
+// add bisa didaftarkan secara parsial dengan syarat deklarasi add terlebih dahulu sebelum goroutines berjalan
+
 func TestWaitGroup(t *testing.T) {
 	group := &sync.WaitGroup{}
-	
+
 	for i := 0; i < 100; i++ {
 		group.Add(1)
 		go RunAsynchronous(group)
