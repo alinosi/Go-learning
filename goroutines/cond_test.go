@@ -8,7 +8,7 @@ import (
 )
 
 var locker = sync.Mutex{}
-var cond = sync.NewCond(&locker)
+var cond = sync.NewCond(&locker) // menyimpan address dari locker
 var group = sync.WaitGroup{}
 
 func WaitCondition(value int) {
