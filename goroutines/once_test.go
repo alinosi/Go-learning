@@ -26,5 +26,5 @@ func TestOnce(t *testing.T) {
 	}
 
 	group.Wait()
-	fmt.Println("Counter", counter)
+	fmt.Println("Counter", counter) // hasilnya adalah 1 karena func nya hanya dapat dipanggil 1 x
 }
