@@ -6,13 +6,13 @@ type Man struct {
 	Name string
 }
 
-func (man *Man) Married() {
-	man.Name = "Mr. " + man.Name
+func (man *Man) IsMarried() {
+	man.Name = "Sir. " + man.Name
 }
 
 func main() {
-	eko := Man{"Eko"}
-	eko.Married()
+	Noby := Man{"Noby"}
+	Noby.IsMarried()
 
-	fmt.Println(eko.Name)
+	fmt.Println(Noby.Name)
 }

@@ -7,8 +7,15 @@ import (
 	"time"
 )
 
+// dua cara deklarasi mutex
+
+// mutex berlabel
 var locker = sync.Mutex{}
-var cond = sync.NewCond(&locker) // menyimpan address dari locker
+var cond = sync.NewCond(&locker)
+
+// anonymous mutex
+// var cond = sync.NewCond(&sync.mutex{})
+
 var group = sync.WaitGroup{}
 
 func WaitCondition(value int) {
