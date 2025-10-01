@@ -24,6 +24,6 @@ func TestWaitGroup(t *testing.T) {
 		go RunAsynchronous(group)
 	}
 
-	group.Wait()
+	group.Wait() // wait akan selesai ketika semua parameter add yang didaftarkan bernilai 0
 	fmt.Println("Selesai")
 }
