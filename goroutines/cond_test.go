@@ -20,10 +20,11 @@ var group = sync.WaitGroup{}
 
 func WaitCondition(value int) {
 	defer group.Done()
-	
+
 	cond.L.Lock()
+	fmt.Println("Pemenang lap 1", value)
 	cond.Wait()
-	fmt.Println("Done", value)
+	fmt.Println("Pemenang lap 2", value)
 	cond.L.Unlock()
 }
 
@@ -40,15 +41,14 @@ func TestCond(t *testing.T) {
 		}
 	}()
 
-	//go func() {
-	//	time.Sleep(1 * time.Second)
-	//	cond.Broadcast()
-	//}()
+	// go func() {
+	// 	time.Sleep(1 * time.Second)
+	// 	cond.Broadcast()
+	// }()
 
 	group.Wait()
 	fmt.Println("uji coba selesai")
 }
-
 
 /*
 	perbedaan utama antara cond dan locking biasa adalah METHOD WAIT
