@@ -20,8 +20,7 @@ var group = sync.WaitGroup{}
 
 func WaitCondition(value int) {
 	defer group.Done()
-	group.Add(1)
-
+	
 	cond.L.Lock()
 	cond.Wait()
 	fmt.Println("Done", value)
@@ -30,6 +29,7 @@ func WaitCondition(value int) {
 
 func TestCond(t *testing.T) {
 	for i := 0; i < 10; i++ {
+		group.Add(1)
 		go WaitCondition(i)
 	}
 
@@ -46,4 +46,12 @@ func TestCond(t *testing.T) {
 	//}()
 
 	group.Wait()
+	fmt.Println("uji coba selesai")
 }
+
+
+/*
+	perbedaan utama antara cond dan locking biasa adalah METHOD WAIT
+	setelah goroutines berhasil melakukan locking terhadap sesuatu, apa yang terjadi selanutnya
+	bukanlah eksekusi, tetapi wait condition. Aritnya jangan langunsg lanjut, tetapi tunggu dulu
+*/
