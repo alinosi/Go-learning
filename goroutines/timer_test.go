@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+// send event after specified time
+
 func TestTimer(t *testing.T) {
 	timer := time.NewTimer(5 * time.Second) // return timer object
 	fmt.Println(time.Now())
