@@ -74,6 +74,4 @@ func main() {
 			counter++
 		}
 	}()
-
-	return destination
 }
