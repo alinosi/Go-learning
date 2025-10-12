@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func CreateCounters() chan int {
+func CreateCounterValidation() chan int {
 	destination := make(chan int)
 
 	go func() {
@@ -17,15 +17,15 @@ func CreateCounters() chan int {
 			counter++
 		}
 	}()
-	return destination
+	return destination // return channel that are still active
 }
 
-func TestContextWithCancels(t *testing.T) {
+func TestContextWithCancelValidation(t *testing.T) {
 	fmt.Println("total goroutines : ", runtime.NumGoroutine())
 
-	destination := CreateCounters()
+	destination := CreateCounterValidation()
 	for n := range destination {
-		fmt.Println("COunter ", n)
+		fmt.Println("Counter ", n)
 		if n == 10 {
 			break
 		}
@@ -34,3 +34,4 @@ func TestContextWithCancels(t *testing.T) {
 	fmt.Println("total goroutines :", runtime.NumGoroutine())
 }
 
+// number of counters will be equal to
