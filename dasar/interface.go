@@ -33,3 +33,5 @@ func main() {
 	animal := Animal{Name: "Kucing"}
 	SayHello(animal)
 }
+
+// interface 

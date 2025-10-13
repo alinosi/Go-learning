@@ -25,7 +25,7 @@ func TestContextWithValue(t *testing.T) {
 	contextD := context.WithValue(contextB, "d", "D")
 	contextE := context.WithValue(contextB, "e", "E")
 
-	contextF := context.WithValue(contextC, "f", "F")
+	contextF := context.WithValue(contextC, "f", "value of f")
 	contextG := context.WithValue(contextF, "g", "G")
 
 	fmt.Println(contextA)
@@ -36,7 +36,7 @@ func TestContextWithValue(t *testing.T) {
 	fmt.Println(contextF)
 	fmt.Println(contextG)
 
-	fmt.Println(contextF.Value("f"))
+	fmt.Println(contextF.Value("f")) // value of f key = F
 	fmt.Println(contextF.Value("c"))
 	fmt.Println(contextF.Value("b"))
 
@@ -51,7 +51,7 @@ func CreateCounter(ctx context.Context) chan int {
 		counter := 1
 		for {
 			select {
-			case <-ctx.Done():
+			case <-ctx.Done(): // waiting data form channel
 				return
 			default:
 				destination <- counter
@@ -64,28 +64,7 @@ func CreateCounter(ctx context.Context) chan int {
 	return destination
 }
 
-func CreateCounters(ctx context.Context) chan int {
-	destination := make(chan int)
-
-	go func() {
-		defer close(destination)
-		counter := 1
-		for {
-			select {
-			case <-ctx.Done():
-				return
-			default:
-				destination <- counter
-				counter++
-				time.Sleep(1 * time.Second) // simulasi slow
-			}
-		}
-	}()
-
-	return destination
-}
-
-func TestContextWithCancels(t *testing.T) {
+func TestContextWithCancel(t *testing.T) {
 	fmt.Println("Total Goroutine", runtime.NumGoroutine())
 
 	parent := context.Background()
