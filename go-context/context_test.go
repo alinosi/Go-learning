@@ -51,11 +51,9 @@ func CreateCounter(ctx context.Context) chan int {
 		counter := 1
 		for {
 			select {
-			case <-ctx.Done(): // waiting data from channel
+			case <-ctx.Done(): // only occurs if the counter successfully sends data
 				return
-			default:
-				destination <- counter
-				// jika tidak ada sleep setiap data-n maka bisa saja Goroutine terblok di sini
+			case destination <- counter: // only occurs if the counter successfully sends data
 				counter++
 				time.Sleep(1 * time.Second) // simulasi slow
 			}
