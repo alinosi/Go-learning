@@ -51,7 +51,7 @@ func CreateCounter(ctx context.Context) chan int {
 		counter := 1
 		for {
 			select {
-			case <-ctx.Done(): // waiting data form channel
+			case <-ctx.Done(): // waiting data from channel
 				return
 			default:
 				destination <- counter
