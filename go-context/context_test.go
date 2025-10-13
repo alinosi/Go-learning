@@ -82,20 +82,26 @@ func TestContextWithCancel(t *testing.T) {
 
 	cancel() // mengirim sinyal cancel ke context
 
-	time.Sleep(2 * time.Second)
+	time.Sleep(2 * time.Second) // cancel function runs in parallel
 
 	fmt.Println("Total Goroutine", runtime.NumGoroutine())
 }
 
-func main() {
-	destination := make(chan int)
+func TestContextWithTimeout(t *testing.T) {
+	fmt.Println("Total Goroutine", runtime.NumGoroutine())
 
-	go func() {
-		defer close(destination)
-		counter := 1
-		for {
-			destination <- counter
-			counter++
-		}
-	}()
+	parent := context.Background()
+	ctx, cancel := context.WithTimeout(parent, 5*time.Second)
+	defer cancel()
+
+	destination := CreateCounter(ctx)
+	fmt.Println("Total Goroutine", runtime.NumGoroutine())
+
+	for n := range destination {
+		fmt.Println("Counter", n)
+	}
+
+	time.Sleep(2 * time.Second)
+
+	fmt.Println("Total Goroutine", runtime.NumGoroutine())
 }
