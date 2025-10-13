@@ -55,6 +55,7 @@ func CreateCounter(ctx context.Context) chan int {
 				return
 			default:
 				destination <- counter
+				// jika tidak ada sleep setiap data-n maka bisa saja Goroutine terblok di sini
 				counter++
 				time.Sleep(1 * time.Second) // simulasi slow
 			}
