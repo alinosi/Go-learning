@@ -52,7 +52,7 @@ func CreateCounter(ctx context.Context) chan int {
 		for {
 			select {
 			case <-ctx.Done(): // only occurs if the counter successfully sends data
-				return
+				return // function completed
 			case destination <- counter: // only occurs if the counter successfully sends data
 				counter++
 				time.Sleep(1 * time.Second) // simulasi slow
