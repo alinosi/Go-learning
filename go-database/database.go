@@ -9,7 +9,7 @@ func GetConnection() *sql.DB {
 	db, err := sql.Open("mysql", "root:@tcp(localhost:3306)/belajar_golang_database?parseTime=true")
 	if err != nil {
 		panic(err)
-	}
+	} // sql.open return a database polling, not make a connection to the database
 
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(100)
