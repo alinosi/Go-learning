@@ -32,16 +32,21 @@ func TestQuerySql(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	defer rows.Close()
+	defer rows.Close() // always remember to close rows(data store variable) after using it.
 
-	for rows.Next() {
+	for rows.Next() { // iterate the rows.
 		var id, name string
+
+		// this method will manipulate data from another scope, that's why we use pointers
 		err = rows.Scan(&id, &name)
+
 		if err != nil {
 			panic(err)
 		}
+
 		fmt.Println("Id:", id)
 		fmt.Println("Name:", name)
 	}
 }
 
+//  vulnerable to sql injection
