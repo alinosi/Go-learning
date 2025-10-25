@@ -11,7 +11,7 @@ import (
 
 func TestExecSql(t *testing.T) {
 	db := GetConnection() // return a database pool
-	defer db.Close() // close the db pool
+	defer db.Close()      // close the db pool
 
 	ctx := context.Background()
 
@@ -218,7 +218,7 @@ func TestPrepareStatement(t *testing.T) {
 		comment := "Komentar ke " + strconv.Itoa(i)
 
 		// use the one connection that has been prepared
-		result, err := statement.ExecContext(ctx, email, comment) 
+		result, err := statement.ExecContext(ctx, email, comment)
 		if err != nil {
 			panic(err)
 		}
@@ -237,7 +237,58 @@ func TestPrepareStatement(t *testing.T) {
 	*/
 
 	/*
-		Prepared statement cocok untuk repeat queries on the same connection, bukan sekadar untuk “banyak traffic”.
-		Scope efektifnya adalah repeated execution in one session, bukan “many users hitting the same endpoint”.
+		Prepared statement cocok untuk repeat queries on the same connection(1 request),
+		bukan sekadar untuk “banyak traffic”. Scope efektifnya adalah repeated execution in one session,
+		bukan “many users hitting the same endpoint”.
+
+		artinya jika kita memiliki method yang 1 requestnya menimbulkan banyak transaksi db dengan query yang sama
+		gunakan prepared method
+
+	*/
+}
+
+func TestTransaction(t *testing.T) {
+	db := GetConnection()
+	defer db.Close()
+
+	ctx := context.Background()
+
+	// atomicity data
+	tx, err := db.Begin() // bind one connection
+	if err != nil {
+		panic(err)
+	}
+
+	script := "INSERT INTO comments(email, comment) VALUES(?, ?)"
+	// do transaction
+	for i := 0; i < 10; i++ {
+		email := "noby" + strconv.Itoa(i) + "@gmail.com"
+		comment := "Komentar ke " + strconv.Itoa(i)
+
+		result, err := tx.ExecContext(ctx, script, email, comment)
+		if err != nil {
+			panic(err)
+		}
+
+		id, err := result.LastInsertId()
+		if err != nil {
+			panic(err)
+		}
+
+		fmt.Println("Comment Id ", id)
+	}
+
+	// err = tx.Commit()
+	err = tx.Rollback() // return the connection to db pool
+
+	if err != nil {
+		panic(err)
+	}
+
+	/*
+		Both PrepareContext and tx temporarily hold a single connection from the pool.
+		
+		The difference is that a prepared statement locks the connection to run one query efficiently,
+		while a transaction locks the connection to group multiple queries as one atomic operation.
 	*/
 }
