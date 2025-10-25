@@ -4,12 +4,13 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"strconv"
 	"testing"
 	"time"
 )
 
 func TestExecSql(t *testing.T) {
-	db := GetConnection()
+	db := GetConnection() // return a database pool
 	defer db.Close()
 
 	ctx := context.Background()
@@ -66,7 +67,7 @@ func TestQuerySqlComplex(t *testing.T) {
 
 	for rows.Next() {
 		var id, name string
-		var email sql.NullString
+		var email sql.NullString // if the column allows NULL value, use custom data type from sql package
 		var balance int32
 		var rating float64
 		var birthDate sql.NullTime
@@ -102,6 +103,7 @@ func TestSqlInjection(t *testing.T) {
 	username := "admin'; #"
 	password := "salah"
 
+	// use concatenation instead of substitution(preapre statement)
 	script := "SELECT username FROM user WHERE username = '" + username +
 		"' AND password = '" + password + "' LIMIT 1" //  this script is vulnerable to sql injection
 	fmt.Println(script)
@@ -132,7 +134,7 @@ func TestSqlInjectionSafe(t *testing.T) {
 	username := "admin'; #"
 	password := "salah"
 
-	// user parameter instead of concatenation
+	// user parameter instead of concatenation(substitution)
 	script := "SELECT username FROM user WHERE username = ? AND password = ? LIMIT 1"
 	fmt.Println(script)
 	rows, err := db.QueryContext(ctx, script, username, password) // variable position must be sequential
@@ -193,4 +195,44 @@ func TestAutoIncrement(t *testing.T) {
 	}
 
 	fmt.Println("Success insert new comment with id", insertId)
+}
+
+func TestPrepareStatement(t *testing.T) {
+	db := GetConnection()
+	defer db.Close()
+
+	// ExecContext and QueryContext implicitly prepare the statement each time,
+	// but they don't guarantee reusing the same DB connection.
+	// Use PrepareContext if you need a reusable prepared statement.
+
+	ctx := context.Background()
+	script := "INSERT INTO comments(email, comment) VALUES(?, ?)"
+	statement, err := db.PrepareContext(ctx, script) // bind one connection
+	if err != nil {
+		panic(err)
+	}
+	defer statement.Close()
+
+	for i := 0; i < 10; i++ {
+		email := "noby" + strconv.Itoa(i) + "@gmail.com"
+		comment := "Komentar ke " + strconv.Itoa(i)
+
+		// use the one connection that has been prepared
+		result, err := statement.ExecContext(ctx, email, comment) 
+		if err != nil {
+			panic(err)
+		}
+
+		id, err := result.LastInsertId()
+		if err != nil {
+			panic(err)
+		}
+
+		fmt.Println("Comment Id ", id)
+	}
+
+	/*
+		The prepared method creates a dedicated connection for the input query,
+		allowing it to be reused. Suitable for queries where parameter values ​​frequently change.
+	*/
 }
