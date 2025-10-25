@@ -11,7 +11,7 @@ import (
 
 func TestExecSql(t *testing.T) {
 	db := GetConnection() // return a database pool
-	defer db.Close()
+	defer db.Close() // close the db pool
 
 	ctx := context.Background()
 
@@ -211,7 +211,7 @@ func TestPrepareStatement(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	defer statement.Close()
+	defer statement.Close() // return the connection to the db pool
 
 	for i := 0; i < 10; i++ {
 		email := "noby" + strconv.Itoa(i) + "@gmail.com"
@@ -234,5 +234,10 @@ func TestPrepareStatement(t *testing.T) {
 	/*
 		The prepared method creates a dedicated connection for the input query,
 		allowing it to be reused. Suitable for queries where parameter values ​​frequently change.
+	*/
+
+	/*
+		Prepared statement cocok untuk repeat queries on the same connection, bukan sekadar untuk “banyak traffic”.
+		Scope efektifnya adalah repeated execution in one session, bukan “many users hitting the same endpoint”.
 	*/
 }

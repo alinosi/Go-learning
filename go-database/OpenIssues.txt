@@ -1,0 +1,5 @@
+PREPARED STATEMENT URGENCY
+
+btw apakah method create account cocok menggunakan prepared statement? sebenarnya best practice utnuk menggunakan
+ini adalah ketika query berulang di satu waktu alias boom traffic atau bagaimana? apakah scopenya itu terbatas pada
+query yang berada di dalam loop atau lebih ke aware terhadap user yang banyak mengakses method tsb?
