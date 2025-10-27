@@ -50,3 +50,7 @@ func TestFindAll(t *testing.T) {
 		fmt.Println(comment)
 	}
 }
+
+func TestMain(t *testing.T) {
+	
+}
