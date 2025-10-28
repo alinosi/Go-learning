@@ -7,6 +7,7 @@ type HasName interface {
 }
 
 func SayHello(value HasName) {
+	fmt.Println("another logic")
 	fmt.Println("Hello", value.GetName())
 }
 
@@ -34,4 +35,4 @@ func main() {
 	SayHello(animal)
 }
 
-// interface 
+// interface

@@ -15,15 +15,16 @@ package repository
 // }
 
 // func (repository *MockcommentRepositoryImpl) Insert(ctx context.Context, comment entity.Comment) (entity.Comment, error) {
-	
 
-// 	return 
+// 	return comment, nil
 // }
 
 // func (repository *MockcommentRepositoryImpl) FindById(ctx context.Context, id int32) (entity.Comment, error) {
 
+// 	return comment, nil
 // }
 
 // func (repository *MockcommentRepositoryImpl) FindAll(ctx context.Context) ([]entity.Comment, error) {
 
+// 	return comment, nil
 // }
