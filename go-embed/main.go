@@ -4,7 +4,7 @@ import (
 	"embed"
 	"fmt"
 	"io/fs"
-	"io/ioutil"
+	"os"
 )
 
 //go:embed version.txt
@@ -19,7 +19,7 @@ var path embed.FS
 func main() {
 	fmt.Println(version)
 
-	err := ioutil.WriteFile("logo_new.png", logo, fs.ModePerm)
+	err := os.WriteFile("logo_new.png", logo, fs.ModePerm)
 	if err != nil {
 		panic(err)
 	}
