@@ -63,3 +63,19 @@ func TestPathMatcher(t *testing.T) {
 		}
 	}
 }
+
+// in-one case 
+
+//go:embed *.txt
+var path embed.FS
+
+func TestPathMatcher(t *testing.T) {
+    dirEntries, _ := path.ReadDir(".") // titik artinya direktori utama (root dari embed)
+    for _, entry := range dirEntries {
+        if !entry.IsDir() {
+            fmt.Println(entry.Name())
+            file, _ := path.ReadFile(entry.Name()) // tidak perlu "files/"
+            fmt.Println(string(file))
+        }
+    }
+}
