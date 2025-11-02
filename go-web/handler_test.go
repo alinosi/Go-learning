@@ -8,6 +8,7 @@ import (
 
 func TestHandler(t *testing.T) {
 
+	// function declaration
 	var handler http.HandlerFunc = func(writer http.ResponseWriter, request *http.Request) {
 		// logic web
 		fmt.Fprint(writer, "Hello World")
@@ -57,8 +58,8 @@ func TestRequest(t *testing.T) {
 	}
 
 	server := http.Server{
-		Addr: "localhost:8080",
-		Handler:  handler,
+		Addr:    "localhost:8080",
+		Handler: handler,
 	}
 
 	err := server.ListenAndServe()
