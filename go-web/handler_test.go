@@ -6,6 +6,10 @@ import (
 	"testing"
 )
 
+/*
+handler adalah sebutan untuk penanganan kejadian, dalam konteks ini
+handler adalah yang bertanggung jawab terhadap request client.
+*/
 func TestHandler(t *testing.T) {
 
 	// function declaration
@@ -26,6 +30,7 @@ func TestHandler(t *testing.T) {
 
 }
 
+// multiple handler berdasarkan endpoint
 func TestServeMux(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
