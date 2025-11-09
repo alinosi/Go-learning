@@ -28,7 +28,7 @@ func TestRequestHeader(t *testing.T) {
 }
 
 func ResponseHeader(writer http.ResponseWriter, request *http.Request) {
-	writer.Header().Add("X-Powered-By", "Programmer Zaman Now")
+	writer.Header().Add("X-Powered-By", "Noby Null Request")
 	fmt.Fprint(writer, "OK")
 }
 
