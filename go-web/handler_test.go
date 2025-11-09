@@ -20,7 +20,7 @@ func TestHandler(t *testing.T) {
 
 	server := http.Server{
 		Addr:    "localhost:8080",
-		Handler: handler,
+		Handler: handler, // handler dijalankan sebagai response ketika web diakses
 	}
 
 	err := server.ListenAndServe()
